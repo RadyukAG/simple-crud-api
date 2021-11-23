@@ -13,4 +13,6 @@ const router = (req) => {
     };
 
     return controller.noSuchPageHandler(req);
-}
+};
+
+module.exports = router;
