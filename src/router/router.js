@@ -3,16 +3,16 @@ const { URLS } = require('./constants');
 const Controller = require('./Controller');
 const controller = new Controller();
 
-const router = (req) => {
+const router = (req, res) => {
     if (URLS.PERSON.test(req.url)) {
-        return controller.handlePersonsRequest(req);
+        return controller.handlePersonsRequest(req, res);
     };
 
     if (URLS.PERSON_ID.test(req.url)) {
-        return controller.handlePersonIdRequest(req);
+        return controller.handlePersonIdRequest(req, res);
     };
 
-    return controller.noSuchPageHandler(req);
+    return controller.noSuchPageHandler(req, res);
 };
 
 module.exports = router;
