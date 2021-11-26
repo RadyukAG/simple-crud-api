@@ -1,17 +1,18 @@
 const { v4 } = require('uuid');
 
 class Db {
+
     constructor() {
         this.persons = {};
     }
 
-    getAllPersons() {
-        return this.persons;
-    }
+    // getAllPersons() {
+    //     return this.persons;
+    // }
 
-    getPerson() {
+    // getPerson() {
 
-    }
+    // }
 
     addPerson(person) {
         const storedPerson = {
@@ -26,9 +27,9 @@ class Db {
         return storedPerson;
     }
 
-    removePerson(id) {
+    // removePerson(id) {
 
-    }
+    // }
 };
 
 module.exports = Db;

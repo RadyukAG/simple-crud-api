@@ -1,24 +1,26 @@
-const { METHODS } = require('./constants');
+const { METHODS } = require('../common/constants');
 const { isPersonValid } = require('./utils');
 
 class Controller {
 
-    constructor(Db) {
-        this.db = new Db();
+    constructor(db) {
+        this.db = db;
     }
 
-    handlePersonsRequest(req) {
+    handlePersonsRequest(req, res) {
         switch(req.method) {
             case METHODS.GET:
-                return this.getAllPersons(res);
+                this.getAllPersons(res);
+                break;
             case METHODS.POST:
-                return this.addPersonToDB(req.body, res);
+                this.addPersonToDB(req.body, res);
+                break;
             default:
-                return this.cannotHandleRequest();         
+                this.cannotHandleRequest(res);         
         }
     }
 
-    handlePersonIdRequest(req) {
+    handlePersonIdRequest(req, res) {
         switch(req.method) {
             case METHODS.GET:
                 return this.getPersonById(req);
@@ -27,7 +29,7 @@ class Controller {
             case METHODS.DELETE:
                 return this.deletePerson(req);
             default:
-                return this.cannotHandleRequest();        
+                return this.cannotHandleRequest(res);        
         }
     }
 
@@ -63,7 +65,6 @@ class Controller {
             // statusCode: number;
             // headers?: Array<Array<string>>;
         // }
-        res.statusCode = options.statusCode;
         if (options.write) {
             res.write(options.write);
         };
@@ -73,6 +74,13 @@ class Controller {
             });
         }
         res.end();
+    }
+
+    noSuchPageHandler(res) {
+        this.constructResponse(res, {
+            statusCode: 404,
+            write: 'Sorry, but there is no such resource.'
+        })
     }
 }
 

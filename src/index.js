@@ -1,11 +1,15 @@
 const http = require('http');
 require('dotenv').config();
-const { PROCESS_PORT } = require('./common/constants');
+const { PROCESS_PORT, METHODS } = require('./common/constants');
 const router = require('./router/router');
+const { parseRequestBody, eventHub } = require('./utils/utils');
 
 const server = http.createServer((req, res) => {
-    const readyRes = router(req, res);
-    readyRes.end();
+    if (req.method === METHODS.POST) {
+        parseRequestBody(req, res, router);
+    } else {
+        router(req, res);
+    }
 });
 
-server.listen(process.PROCESS_PORT || 8000);
+server.listen(process.env[PROCESS_PORT] || 8000);
