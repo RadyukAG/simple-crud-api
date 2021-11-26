@@ -32,24 +32,48 @@ class Controller {
     }
 
     getAllPersons(res) {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-        res.write(JSON.stringify(this.db.getAllPersons()));
-        res.end();
+        this.constructResponse(res, {
+            write: JSON.stringify(this.db.getAllPersons()),
+            statusCode: 200,
+            headers: [['Content-Type', 'application/json']],
+        })
     }
 
     addPersonToDB(person, res) {
         try {
             if (isPersonValid(person)) {
-                this.db.addPerson(person);
+                const storedPerson = this.db.addPerson(person);
+                res.statusCode = 201
+                this.constructResponse(res, {
+                    write: JSON.stringify(storedPerson),
+                    statusCode: 201,
+                })
             }
         } catch (e) {
-            res.statusCode = 400;
-            res.write(e.message);
-            res.end();
+            this.constructResponse(res, {
+                statusCode: 400,
+                write: e.message,
+            });
         }
     }
 
+    constructResponse(res, options) {
+        // interface Options = {
+            // write: string;
+            // statusCode: number;
+            // headers?: Array<Array<string>>;
+        // }
+        res.statusCode = options.statusCode;
+        if (options.write) {
+            res.write(options.write);
+        };
+        if (options.headers) {
+            options.headers.forEach(([key, val]) => {
+                res.setHeader(key, val);
+            });
+        }
+        res.end();
+    }
 }
 
 module.exports = Controller;
