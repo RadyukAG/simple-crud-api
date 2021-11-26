@@ -1,4 +1,4 @@
-const parseRequestBody = (req, res, callback) => {
+const parseRequestBody = (req, callback) => {
     const data = [];
     req.on('data', chunk => {
         data.push(chunk);
@@ -9,13 +9,15 @@ const parseRequestBody = (req, res, callback) => {
         if (req.headers["content-type"] === "application/json") {
             req.body = JSON.parse(req.body);
         }
-        callback(req, res);
+        callback();
     });
 };
 
 const eventHub = {
     startRouter(req, res, callback) {
-        callback(req, res);
+        return function () {
+            callback(req, res);
+        }    
     }
 }
 

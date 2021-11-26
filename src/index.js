@@ -5,10 +5,11 @@ const router = require('./router/router');
 const { parseRequestBody, eventHub } = require('./utils/utils');
 
 const server = http.createServer((req, res) => {
+    const startCallback = eventHub.startRouter(req, res, router);
     if (req.method === METHODS.POST) {
-        parseRequestBody(req, res, router);
+        parseRequestBody(req, startCallback);
     } else {
-        router(req, res);
+        startCallback();
     }
 });
 
