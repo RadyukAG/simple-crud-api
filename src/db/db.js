@@ -17,11 +17,13 @@ class Db {
         const storedPerson = {
             id: v4(),
             ...person,
-        }
+        };
         this.persons = {
             ...this.persons,
             [storedPerson.id]: storedPerson,
-        }
+        };
+
+        return storedPerson;
     }
 
     removePerson(id) {

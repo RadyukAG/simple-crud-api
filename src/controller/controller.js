@@ -1,4 +1,5 @@
 const { METHODS } = require('./constants');
+const { isPersonValid } = require('./utils');
 
 class Controller {
 
@@ -11,7 +12,7 @@ class Controller {
             case METHODS.GET:
                 return this.getAllPersons(res);
             case METHODS.POST:
-                return this.addPersonToDB(req);
+                return this.addPersonToDB(req.body, res);
             default:
                 return this.cannotHandleRequest();         
         }
@@ -35,6 +36,18 @@ class Controller {
         res.setHeader("Content-Type", "application/json");
         res.write(JSON.stringify(this.db.getAllPersons()));
         res.end();
+    }
+
+    addPersonToDB(person, res) {
+        try {
+            if (isPersonValid(person)) {
+                this.db.addPerson(person);
+            }
+        } catch (e) {
+            res.statusCode = 400;
+            res.write(e.message);
+            res.end();
+        }
     }
 
 }

@@ -1,7 +1,9 @@
 const { URLS } = require('./constants');
-
+const Db = require('../db/db');
 const Controller = require('./Controller');
-const controller = new Controller();
+
+const db = new Db();
+const controller = new Controller(db);
 
 const router = (req, res) => {
     if (URLS.PERSON.test(req.url)) {
