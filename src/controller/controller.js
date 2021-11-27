@@ -8,29 +8,37 @@ class Controller {
     }
 
     handlePersonsRequest(req, res) {
-        switch(req.method) {
-            case METHODS.GET:
-                this.getAllPersons(res);
-                break;
-            case METHODS.POST:
-                this.addPersonToDB(req.body, res);
-                break;
-            default:
-                this.cannotHandleRequest(res);         
-        }
+        try {
+            switch(req.method) {
+                case METHODS.GET:
+                    this.getAllPersons(res);
+                    break;
+                case METHODS.POST:
+                    this.addPersonToDB(req.body, res);
+                    break;
+                default:
+                    this.cannotHandleRequest(res);
+            }
+        } catch(err) {
+            this.cannotHandleRequest(res, err);
+        }    
     }
 
     handlePersonIdRequest(req, res) {
-        switch(req.method) {
-            case METHODS.GET:
-                return this.getPersonById(req);
-            case METHODS.PUT:
-                return this.updatePerson(req);
-            case METHODS.DELETE:
-                return this.deletePerson(req);
-            default:
-                return this.cannotHandleRequest(res);        
-        }
+        try {
+            switch(req.method) {
+                case METHODS.GET:
+                    return this.getPersonById(req);
+                case METHODS.PUT:
+                    return this.updatePerson(req);
+                case METHODS.DELETE:
+                    return this.deletePerson(req);
+                default:
+                    return this.cannotHandleRequest(res);        
+            }
+        } catch(err) {
+            this.cannotHandleRequest(res, err);
+        }    
     }
 
     getAllPersons(res) {
@@ -81,6 +89,18 @@ class Controller {
             statusCode: 404,
             write: 'Sorry, but there is no such resource.'
         })
+    }
+
+    cannotHandleRequest(res, err) {
+        let message = 'Sorry, cannot handle your request';
+        if (err) {
+            message += `: ${err.message}`;
+        };
+
+        this.constructResponse(res, {
+            statusCode: 500,
+            write: message,
+        });
     }
 }
 
