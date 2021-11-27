@@ -10,9 +10,9 @@ class Db {
     //     return this.persons;
     // }
 
-    // getPerson() {
-
-    // }
+    getPersonById(id) {
+        return this.persons[id];
+    }
 
     addPerson(person) {
         const storedPerson = {

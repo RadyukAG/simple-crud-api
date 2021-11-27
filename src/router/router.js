@@ -11,11 +11,11 @@ const router = (req, res) => {
         controller.handlePersonsRequest(req, res);
     };
 
-    // if (URLS.PERSON_ID.test(req.url)) {
-    //     controller.handlePersonIdRequest(req, res);
-    // };
+    if (URLS.PERSON_ID.test(req.url)) {
+        controller.handlePersonIdRequest(req, res);
+    };
 
-    // controller.noSuchPageHandler(req, res);
+    controller.noSuchPageHandler(req, res);
 };
 
 module.exports = router;

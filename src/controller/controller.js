@@ -1,5 +1,6 @@
 const { METHODS } = require('../common/constants');
-const { isPersonValid } = require('./utils');
+const { isPersonValid, extractEndOfURL } = require('./utils');
+const uuid = require('uuid');
 
 class Controller {
 
@@ -18,23 +19,6 @@ class Controller {
                     break;
                 default:
                     this.cannotHandleRequest(res);
-            }
-        } catch(err) {
-            this.cannotHandleRequest(res, err);
-        }    
-    }
-
-    handlePersonIdRequest(req, res) {
-        try {
-            switch(req.method) {
-                case METHODS.GET:
-                    return this.getPersonById(req);
-                case METHODS.PUT:
-                    return this.updatePerson(req);
-                case METHODS.DELETE:
-                    return this.deletePerson(req);
-                default:
-                    return this.cannotHandleRequest(res);        
             }
         } catch(err) {
             this.cannotHandleRequest(res, err);
@@ -65,6 +49,46 @@ class Controller {
                 write: e.message,
             });
         }
+    }
+
+    handlePersonIdRequest(req, res) {
+        try {
+            switch(req.method) {
+                case METHODS.GET:
+                    return this.getPersonById(req, res);
+                case METHODS.PUT:
+                    return this.updatePerson(req);
+                case METHODS.DELETE:
+                    return this.deletePerson(req);
+                default:
+                    return this.cannotHandleRequest(res);        
+            }
+        } catch(err) {
+            this.cannotHandleRequest(res, err);
+        }    
+    }
+
+    getPersonById(req, res) {
+        const id = extractEndOfURL(req.url);
+        if (!uuid.validate(id)) {
+            this.constructResponse(res, {
+                statusCode: 400,
+                write: 'Passed id is not uuid. Please verify',
+            });
+            return;
+        };
+        const person = this.db.getPersonById(id);
+        if (!person) {
+            this.constructResponse(res, {
+                statusCode: 404,
+                write: `There is no person with id ${id}`,
+            });
+            return;
+        };
+        this.constructResponse(res, {
+            statusCode: 200,
+            write: JSON.stringify(person),
+        })
     }
 
     constructResponse(res, options) {

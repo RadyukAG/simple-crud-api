@@ -14,6 +14,11 @@ const isPersonValid = (person) => {
     return true;
 };
 
+const extractEndOfURL = (url) => {
+    return url.split('/').pop;
+};
+
 module.exports = {
     isPersonValid,
+    extractEndOfURL,
 }
