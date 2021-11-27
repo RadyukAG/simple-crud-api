@@ -68,7 +68,7 @@ class Controller {
         }    
     }
 
-    getPersonById(req, res) {
+    validatePersonId(req) {
         const id = extractEndOfURL(req.url);
         if (!uuid.validate(id)) {
             this.constructResponse(res, {
@@ -77,7 +77,34 @@ class Controller {
             });
             return;
         };
+        return id;
+    }
+
+    getPersonById(req, res) {
+        const id = this.validatePersonId(req, res);
+        if (!id) {
+            return;
+        }
         const person = this.db.getPersonById(id);
+        if (!person) {
+            this.constructResponse(res, {
+                statusCode: 404,
+                write: `There is no person with id ${id}`,
+            });
+            return;
+        };
+        this.constructResponse(res, {
+            statusCode: 200,
+            write: JSON.stringify(person),
+        });
+    }
+
+    updatePerson(req, res) {
+        const id = this.validatePersonId(req, res);
+        if (!id) {
+            return;
+        }
+        const person = this.db.updatePerson(id);
         if (!person) {
             this.constructResponse(res, {
                 statusCode: 404,
