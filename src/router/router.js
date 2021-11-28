@@ -9,10 +9,12 @@ const router = (req, res) => {
     console.log(`New request on ${req.url}`);
     if (URLS.PERSON.test(req.url)) {
         controller.handlePersonsRequest(req, res);
+        return;
     };
 
     if (URLS.PERSON_ID.test(req.url)) {
         controller.handlePersonIdRequest(req, res);
+        return;
     };
 
     controller.noSuchPageHandler(req, res);

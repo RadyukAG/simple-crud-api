@@ -30,7 +30,7 @@ class Controller {
             write: JSON.stringify(this.db.getAllPersons()),
             statusCode: 200,
             headers: [['Content-Type', 'application/json']],
-        })
+        });
     }
 
     addPersonToDB(person, res) {
@@ -57,9 +57,9 @@ class Controller {
                 case METHODS.GET:
                     return this.getPersonById(req, res);
                 case METHODS.PUT:
-                    return this.updatePerson(req);
+                    return this.updatePerson(req, res);
                 case METHODS.DELETE:
-                    return this.deletePerson(req);
+                    return this.deletePerson(req, res);
                 default:
                     return this.cannotHandleRequest(res);        
             }
@@ -68,7 +68,7 @@ class Controller {
         }    
     }
 
-    validatePersonId(req) {
+    validatePersonId(req, res) {
         const id = extractEndOfURL(req.url);
         if (!uuid.validate(id)) {
             this.constructResponse(res, {
@@ -104,7 +104,7 @@ class Controller {
         if (!id) {
             return;
         }
-        const person = this.db.updatePerson(id);
+        const person = this.db.updatePerson(id, req.body);
         if (!person) {
             this.constructResponse(res, {
                 statusCode: 404,
@@ -124,14 +124,16 @@ class Controller {
             // statusCode: number;
             // headers?: Array<Array<string>>;
         // }
-        if (options.write) {
-            res.write(options.write);
-        };
+        console.log(options);
         if (options.headers) {
             options.headers.forEach(([key, val]) => {
                 res.setHeader(key, val);
             });
         }
+        res.statusCode = options.statusCode;
+        if (options.write) {
+            res.write(options.write);
+        };
         res.end();
     }
 

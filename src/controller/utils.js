@@ -15,7 +15,7 @@ const isPersonValid = (person) => {
 };
 
 const extractEndOfURL = (url) => {
-    return url.split('/').pop;
+    return url.split('/').pop();
 };
 
 module.exports = {

@@ -8,6 +8,7 @@ class Db {
     }
 
     getAllPersons() {
+        console.log('call');
         return this.persons;
     }
 
@@ -28,17 +29,22 @@ class Db {
         return storedPerson;
     }
 
-    updatePerson(id) {
+    updatePerson(id, newPerson) {
         const person = this.persons[id];
         if (!person) {
             return;
         }
-        
+        const updatedPerson = {
+            ...person,
+            ...newPerson,
+        };
+        this.persons[id] = updatedPerson;
+        return updatedPerson;
     }
 
-    // removePerson(id) {
+    removePerson(id) {
 
-    // }
+    }
 };
 
 module.exports = Db;
