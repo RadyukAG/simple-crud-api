@@ -13,6 +13,8 @@
     * `hobbies` — person's hobbies (`array` of `strings` or empty `array`, **required**)
 
 ## To run app in dev mode use 'npm run start:dev'. To run app in prod mode use 'npm run start:prod'.
+## You can use Postman or another app for API calls. No auth needed.
 ## Server will be listening port 8000, or port you've set in .env. There is an example of .env (.env.example).
+## So API url can be 'localhost:3001/person'
 
 ## For Postman testing you can use small collection from 'for testing/simple_crud_api/postman_collection.json'.
