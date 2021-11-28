@@ -8,7 +8,6 @@ class Db {
     }
 
     getAllPersons() {
-        console.log('call');
         return this.persons;
     }
 
