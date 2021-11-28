@@ -8,7 +8,7 @@ class Db {
     }
 
     getAllPersons() {
-        return this.persons;
+        return Object.values(this.persons);
     }
 
     getPersonById(id) {

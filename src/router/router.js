@@ -6,7 +6,6 @@ const db = new Db();
 const controller = new Controller(db);
 
 const router = (req, res) => {
-    console.log(`New request on ${req.url}`);
     if (URLS.PERSON.test(req.url)) {
         controller.handlePersonsRequest(req, res);
         return;
