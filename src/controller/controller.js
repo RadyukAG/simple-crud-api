@@ -89,7 +89,7 @@ class Controller {
         if (!person) {
             this.constructResponse(res, {
                 statusCode: 404,
-                write: `There is no person with id ${id}`,
+                write: `There is no record with id ${id}`,
             });
             return;
         };
@@ -108,14 +108,32 @@ class Controller {
         if (!person) {
             this.constructResponse(res, {
                 statusCode: 404,
-                write: `There is no person with id ${id}`,
+                write: `There is no record with id ${id}`,
             });
             return;
         };
         this.constructResponse(res, {
             statusCode: 200,
             write: JSON.stringify(person),
-        })
+        });
+    }
+
+    deletePerson(req, res) {
+        const id = this.validatePersonId(req, res);
+        if (!id) {
+            return;
+        };
+        const person = this.db.deletePerson(id);
+        if (!person) {
+            this.constructResponse(res, {
+                statusCode: 404,
+                write: `There is no record with id ${id}`,
+            });
+            return;
+        };
+        this.constructResponse(res, {
+            statusCode: 204,
+        });
     }
 
     constructResponse(res, options) {
@@ -124,7 +142,6 @@ class Controller {
             // statusCode: number;
             // headers?: Array<Array<string>>;
         // }
-        console.log(options);
         if (options.headers) {
             options.headers.forEach(([key, val]) => {
                 res.setHeader(key, val);

@@ -42,8 +42,13 @@ class Db {
         return updatedPerson;
     }
 
-    removePerson(id) {
-
+    deletePerson(id) {
+        const person = this.persons[id];
+        if (!person) {
+            return;
+        }
+        this.persons[id] = undefined;
+        return true;
     }
 };
 
